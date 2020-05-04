@@ -1,0 +1,33 @@
+#myFlexContainer {
+    border: 3px solid green;
+    padding : 10px;
+    background : pink;
+    height :300px;  
+}
+
+#myFlexContainer { /**-- Flexbox --**/
+  display:flex;
+  flex-direction: row;
+  flex-wrap : wrap;
+  justify-content : space-between;
+}
+
+
+#myFlexContainer div {
+  width:100px;
+  height:40px;
+}
+
+#myFlexContainer div:nth-child(even) {
+    background : orange;
+    border: 1px solid blue;
+}
+  
+#myFlexContainer div:nth-child(odd) {
+    background : yellow;
+    border: 1px solid red;
+}
+  
+
+  
+

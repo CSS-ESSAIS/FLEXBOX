@@ -1,0 +1,219 @@
+/*
+
+Dans les explications ci-dessous, j'appelle en fait width : la longueur de l'item
+dans la direction du main axis (qui par défaut donc est horizontal).
+(cf. flex-basis à ce sujet).
+
+==================== flex-grow (que sur item et suivant le main axis) ======================
+
+Calcul approx.* d'une width d'item, suite à un flex-Grow de n (>=0) qu'on lui applique,
+ (* : du fait des marges et autres bordures...),
+en supposant donc ContainerWidth > (Item1Width + Item2Width + Item3Width + ... +ItemNWidth)
+On rappelle, que la val. par défaut du flex-grow d'un item, est de : 0.
+
+On a après application des flex-grow :
+  ContainerWidth =   
+                     Item1Width*(1+ n1*K)  //Width finale(après flex-grow: n1) de Item1.
+                  +  Item2Width*(1+ n2*K)  //Width finale(après flex-grow: n2) de Item2.
+                  +  Item3Width*(1+ n3*K)  //Width finale(après flex-grow: n3) de Item3.
+                  ...
+                  +  ItemNWidth*(1+ nN*K)  //Width finale(après flex-grow: nN) de ItemN.
+  Avec ItemNWidth, Width initiale de l'item No N.                  
+  Et nN : valeur du flex-grow appliqué à l'item No N.
+  Et K donc à déterminer ...
+
+  On a donc :
+    K = (ContainerWidth -(Item1Width + Item2Width + Item3Width + ... +ItemNWidth))
+        __________________________________________________________________________
+           (Item1Width*n1 + Item2Width*n2 + Item3Width*n3 + ... + ItemNWidth*nN)
+
+    Ainsi la Width finale de chaque ItemN sera de :  ItemNWidth*(1+ nN*K)          
+
+    Exemple avec :
+                  ContainerWidth = 500, n1=n3=n4= 1 et n2=3, 
+                  et Item1Width=Item2Width=Item3Width=Item4Width=50
+
+                  K = (500 - (50+50+50+50)) / (50*1 + 50*3 + 50*1 + 50*1)
+                    = 300 / 300 = 1
+                  donc : Item1Width=50*(1+ 1*1) = 100
+                         Item2Width=50*(1+ 3*1) = 200  <<<<
+                         Item3Width=50*(1+ 1*1) = 100
+                         Item4Width=50*(1+ 1*1) = 100
+                  approximativement du fait des marges et autres bordures...
+
+    Autre exemple avec :
+                  ContainerWidth = 500, n1=n3=n4= 1 et n2=2, 
+                  et Item1Width=Item2Width=Item3Width=Item4Width=50
+
+                  K = (500 - (50+50+50+50)) / (50*1 + 50*2 + 50*1 + 50*1)
+                    = 300 / 250 = 1.2
+                  donc : Item1Width=50*(1+ 1*1.2) = 110
+                         Item2Width=50*(1+ 2*1.2) = 170
+                         Item3Width=50*(1+ 1*1.2) = 110
+                         Item4Width=50*(1+ 1*1.2) = 110
+                  approximativement du fait des marges et autres bordures...
+
+    Autre exemple avec :
+                  ContainerWidth = 800, n1=n4=1 et n2=n3=3, 
+                  et Item1Width=Item2Width=Item3Width=Item4Width=100
+
+                  K = (800 - (100+100+100+100)) / (100*1 + 100*3 + 100*3 + 100*1)
+                    = 400 / 800 = 0.5
+                  donc : Item1Width=100*(1+ 1*0.5) = 150
+                         Item2Width=100*(1+ 3*0.5) = 250
+                         Item3Width=100*(1+ 3*0.5) = 250
+                         Item4Width=100*(1+ 1*0.5) = 150
+                  approximativement du fait des marges et autres bordures...                  
+
+
+
+==================== flex-shrink (que sur item et suivant le main axis) =====================
+
+
+Calcul approx.* d'une width d'item, suite à un flex-shrink de n (>=0) qu'on lui applique,
+ (* : du fait des marges et autres bordures...),
+en supposant donc ContainerWidth < (Item1Width + Item2Width + Item3Width + ... +ItemNWidth)
+On rappelle, que la val. par défaut du flex-shrink d'un item, est de : 1.
+
+On a après application des flex-shrink :
+  ContainerWidth =   
+                     Item1Width*(1- n1*K)  //Width finale(après flex-shrink: n1) de Item1.
+                  +  Item2Width*(1- n2*K)  //Width finale(après flex-shrink: n2) de Item2.
+                  +  Item3Width*(1- n3*K)  //Width finale(après flex-shrink: n3) de Item3.
+                  ...
+                  +  ItemNWidth*(1- nN*K)  //Width finale(après flex-shrink: nN) de ItemN.
+  Avec ItemNWidth, Width initiale de l'item No N.
+  et nN : valeur du flex-shrink appliqué à l'item No N.
+  Et K donc à déterminer ...
+
+  On a donc :
+    K = (ContainerWidth -(Item1Width + Item2Width + Item3Width + ... +ItemNWidth))
+        __________________________________________________________________________
+           -(Item1Width*n1 + Item2Width*n2 + Item3Width*n3 + ... + ItemNWidth*nN)
+
+    Ainsi la Width finale de chaque ItemN sera de :  ItemNWidth*(1+ nN*K)          
+
+    Exemple avec :
+                  ContainerWidth = 500, n1=n3=n4= 1 et n2=3, 
+                  et Item1Width=Item2Width=Item3Width=Item4Width=180
+
+                  K = (500 - (180+180+180+180)) / -(180*1 + 180*3 + 180*1 + 180*1)
+                    = -220 / -1080 = 0.2037
+                  donc : Item1Width=180*(1- 1*0.2037) = 143.334
+                         Item2Width=180*(1- 3*0.2037) = 70 <<<<
+                         Item3Width=180*(1- 1*0.2037) = 143.334
+                         Item4Width=180*(1- 1*0.2037) = 143.334
+                  approximativement du fait des marges et autres bordures...
+
+
+
+============================== flex-basis (que sur item) ===============================
+
+Il est recommandé d'utiliser flex-basis, pour spécifier la longueur (width ou bien height),
+des items selon le main axis.
+
+Val. par défaut: auto  =>  n'impacte pas la dimension des items.
+
+Lorsque le main axis est horizontal (par défaut), alors si flex-basis: xxx; 
+est précisé sur un item, la valeur de sa width initiale sera overridée par la valeur xxx.
+
+Lorsque le main axis est vertical (flex-direction: column...), alors si flex-basis: xxx; 
+est précisé sur un item, la valeur de sa height initiale sera overridée par la valeur xxx.
+
+Par "initiale", j'entends "avant application d'un éventuel flex-grow ou flex-shrink".
+
+*/
+
+.body {
+  display: flex;
+  flex-direction: column;
+
+  /* justify-content: space-around; */
+
+
+  /* Placement des items, selon le cross axis : */
+  /* align-items: baseline; */ /*Valeurs possibles: stretch, baseline, flex-start, flex-end, center*/
+                               /* Pour baseline, on peut voir l'effet lorsqu'un item a une
+                               height plus grande que les autres items*/
+  /* align-items: center; */
+  /* align-items: stretch; */ /*Valeur par défaut*/
+
+
+  
+  /*align-content: space-between;*/ /*align-content : n'a d'effet visuel 
+                                      que lorsque l'on a plusieurs lignes 
+                                      (donc qu'avec flex-wrap: wrap) !
+                                      C-à-d lorsque passage à la ligne ...
+                                   */
+  /* flex-wrap: wrap; */ /* Les items passés à la ligne se verront également appliquer le justify-content, notamment*/
+  /* flex-wrap: nowrap; */ /*Valeur par défaut*/
+  /* flex-wrap: wrap-reverse; */ /*Met ce qui aurait être la 1ère ligne, en dernier, et remonte en sens inverse donc.*/
+
+  /*flex-flow: row wrap*/
+  /* Est la forme abrégée de :
+      flex-direction: row;
+      flex-wrap: wrap;
+  */
+
+
+  /*width: 10%*/; /*En % permettra aux flex-grow et flex-shrink de faire varier la taille
+               des items lorsque l'on fera varier la taille de la fenêtre */
+
+  width: 50%;
+
+  height: 90vh; /*70% de la height du ViewPort*/
+  border: solid red 3px;
+
+  /* padding: 0px; */
+}
+
+
+
+.body div {
+  border: solid 2px green;
+  width: 50px;
+  /* width: 180px; */
+  text-align: center;
+  font-weight: bold;
+  /* margin: 0px; */
+
+  /*flex-grow: 0;*/ /*valeur par défaut*/
+  /* flex-grow: 1; */
+
+  /*flex-shrink: 1;*/ /*valeur par défaut => les items dépasseront du container si sur le main axis, celui-ci est de taille insuffisante !*/
+  
+  width: 95px; 
+  height: 70px;
+  /*flex-basis: 150px;*/ /*prend le dessus sur width (si main axis horiz.) ou height (si main axis vertic.).*/
+  /*flex-basis: 90px;*/ /*prend le dessus sur width (si main axis horiz.) ou height (si main axis vertic.).*/
+
+  /* flex: 1 2 25%; */
+  /* Est la forme abrégée de :
+      flex-grow: 1;
+      flex-shrink: 2;
+      flex-basis: 25%;
+  */
+}
+
+
+.body div.d2 {
+  font-size: 2em;
+  
+  /* flex-shrink: 3; */
+
+  /* flex-grow: 2; */
+  /* flex-grow: 3; */
+   /* width: 100px; */
+}
+.d1 {
+  /*align-self: flex-start;*/ /* align-self: override du align-items de CET item */
+}
+
+/* .d2 {
+  order:1;
+  /* Par défaut, l'order de tous les items, est 0,
+   les items seront dans l'ordre (non reverse) placés du plus petit order,
+   au plus grand order. (l'order pouvant être négatif également)
+} */
+
+

@@ -1,0 +1,85 @@
+.body {
+  display: flex;
+  flex-direction: column; /* => pour .body, main axis devient vertical, et cross axis horizontal*/
+  justify-content: space-around; /*Selon le main axis (donc vertical ici car flex-direction: column)*/
+  align-items: center; /*Centrage des items selon le cross axis (donc horiz. ici car flex-direction: column)*/
+
+  width: 99%; 
+  height: 70vh; /*70% de la height du ViewPort*/
+  border: solid red;
+}
+
+
+
+
+.body div.d1 {
+  display: flex; 
+  /*flex-direction par défaut : row (donc main axis horizontal)*/
+  justify-content: center; /*Centrage des items selon le main axis (horizontal par défaut)*/
+  align-items: center; /*Centrage des items selon le cross axis (vertical par défaut)*/
+
+  width: calc(100% - 2%);
+  height: 10%;
+  border: green solid;
+}
+
+
+
+
+
+.body div.d2 {
+  display: flex;
+  justify-content: space-around; /*Selon le main axis (horizontal par défaut)*/
+  align-items: center; /*Centrage des items selon le cross axis (vertical par défaut)*/
+
+  width: 99%;
+  height: 20%;
+  /*border: red solid;*/
+}
+.body div.d2 .compo1 {
+  display: flex;
+  align-items: center; /*Centrage des items selon le cross axis (vertical par défaut)*/
+
+  width: 80%;
+  height: 96%;
+  border: solid blue;
+}
+.body div.d2 .compo2 {
+  display: flex;
+  align-items: center; /*Centrage des items selon le cross axis (vertical par défaut)*/
+
+  width: calc(100% - 80% - 2%);
+  height: 96%;
+  border: solid yellow;
+}
+
+
+
+
+
+
+.body div.d3 {
+  display: flex;
+  justify-content: space-around; /*Selon le main axis (horizontal par défaut)*/
+  align-items: center; /*Centrage des items selon le cross axis (vertical par défaut)*/
+
+  width: 99%;
+  height: 60%;
+  /* border: orange solid; */
+}
+.body div.d3 .compo3 {
+  display: flex;
+  align-items: center; /*Centrage des items selon le cross axis (vertical par défaut)*/
+
+  width: 25%;
+  height: 97%;
+  border: solid blue;
+}
+.body div.d3 .compo4 {
+  display: flex;
+  align-items: center; /*Centrage des items selon le cross axis (vertical par défaut)*/
+
+  width: calc(100% - 25% - 2%);
+  height: 97%;
+  border: solid yellow;
+}
